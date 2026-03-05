@@ -115,6 +115,12 @@ def _autoload_data_folder():
     files = {}
 
     for fname in os.listdir(data_dir):
+
+        if fname.startswith("~$"):
+            continue
+
+        if not fname.lower().endswith((".xlsx",".xls")):
+            continue
         f = fname.lower()
 
         if "agriculture" in f:
