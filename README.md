@@ -26,3 +26,4 @@ The app matches files by keyword in the filename (case-insensitive):
 3. The dashboard will auto-load all detected files — no upload needed!
 
 To reload without restarting, click **🔄 Re-scan data/ folder** in the sidebar.
+"# MPSIMS" 
