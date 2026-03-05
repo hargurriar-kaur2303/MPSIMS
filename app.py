@@ -111,22 +111,30 @@ def init_session():
 
 def _autoload_data_folder():
     data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-    if not os.path.isdir(data_dir): return
-    kw = {"agriculture":"Agriculture","education":"Education",
-          "skill":"Skills","social":"Social Justice","sociasl":"Social Justice","justice":"Social Justice"}
-    found = {}
+
+    files = {}
+
     for fname in os.listdir(data_dir):
-        if not fname.lower().endswith((".xlsx",".xls")): continue
-        fc = fname.lower().replace(" ","").replace("-","").replace("_","")
-        for k,sec in kw.items():
-            if k in fc and sec not in found:
-                found[sec] = os.path.join(data_dir, fname); break
-    if found:
-        try:
-            df = load_all_sectors(found)
-            if not df.empty: _finalize(df)
-        except Exception as e:
-            st.session_state["_load_err"] = str(e)
+        f = fname.lower()
+
+        if "agriculture" in f:
+            files["Agriculture"] = os.path.join(data_dir, fname)
+
+        elif "education" in f:
+            files["School Education"] = os.path.join(data_dir, fname)
+
+        elif "skill" in f:
+            files["Skill"] = os.path.join(data_dir, fname)
+
+        elif "social" in f or "justice" in f:
+            files["Social Justice"] = os.path.join(data_dir, fname)
+
+    try:
+        df = load_all_sectors(files)
+        if not df.empty:
+            _finalize(df)
+    except Exception as e:
+        st.session_state["_load_err"] = str(e)
 
 def _finalize(df: pd.DataFrame):
     df = clean_df_strings(df)
